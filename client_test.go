@@ -2,53 +2,49 @@ package captain
 
 import (
 	"context"
+	"encoding/json"
+	"github.com/go-test/deep"
 	"os"
 	"testing"
 	"time"
 )
 
-func TestLiveRequests(t *testing.T) {
-	if testing.Short() {
-		t.Skip()
-	}
-	accountID := os.Getenv("CAPTAIN_ACCOUNT_ID")
-	if accountID == "" {
-		t.Fatal("missing environment variable: CAPTAIN_ACCOUNT_ID")
-	}
-	integrationKey := os.Getenv("CAPTAIN_INTEGRATION_KEY")
-	if integrationKey == "" {
-		t.Fatal("missing environment variable: CAPTAIN_INTEGRATION_KEY")
-	}
-	developerKey := os.Getenv("CAPTAIN_DEVELOPER_KEY")
-	if developerKey == "" {
-		t.Fatal("missing environment variable: CAPTAIN_DEVELOPER_KEY")
-	}
+func newClientFromEnv(t *testing.T) *Client {
 	client := NewClient()
-	client.IntegrationKey = integrationKey
-	client.DeveloperKey = developerKey
-	testAuthResponse, err := client.TestAuth(withTimeout(time.Second * 5))
-	if err != nil {
-		t.Fatal(err)
+	client.IntegrationKey = mustGetenv(t, "CAPTAIN_INTEGRATION_KEY")
+	client.DeveloperKey = mustGetenv(t, "CAPTAIN_DEVELOPER_KEY")
+	return client
+}
+
+func mustGetenv(t *testing.T, name string) string {
+	value := os.Getenv(name)
+	if value == "" {
+		t.Fatalf("missing environment variable: %q", name)
 	}
-	if testAuthResponse.Message != "Successfully Authorised Using Developer Key and Integration Key." {
-		t.Errorf("unexpected response message")
-	}
-	accounts, err := client.GetAccounts(withTimeout(time.Second * 5))
-	if err != nil {
-		t.Fatal(err)
-	}
-	found := false
-	for _, account := range accounts {
-		if account.UUID == accountID {
-			found = true
-		}
-	}
-	if !found {
-		t.Errorf("expected provided account in list")
-	}
+	return value
 }
 
 func withTimeout(timeout time.Duration) context.Context {
 	ctxWithTimeout, _ := context.WithTimeout(context.Background(), timeout)
 	return ctxWithTimeout
+}
+
+func testExactJSON(t *testing.T, v interface{}, data []byte) {
+	var want interface{}
+	err := json.Unmarshal(data, &want)
+	if err != nil {
+		t.Fatal(err)
+	}
+	buf, err := json.Marshal(v)
+	if err != nil {
+		t.Fatal(err)
+	}
+	var have interface{}
+	err = json.Unmarshal(buf, &have)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if diff := deep.Equal(want, have); diff != nil {
+		t.Fatal(diff)
+	}
 }

@@ -5,8 +5,8 @@ import (
 )
 
 type Account struct {
-	UUID         string `json:"uuid"`
-	FriendlyName string `json:"friendly_name"`
+	UUID         *string `json:"uuid"`
+	FriendlyName *string `json:"friendly_name"`
 }
 
 func (c *Client) GetAccounts(ctx context.Context) ([]*Account, error) {

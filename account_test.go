@@ -1,23 +1,40 @@
 package captain
 
 import (
-	"encoding/json"
-	"reflect"
+	"io/ioutil"
 	"testing"
+	"time"
 )
 
-func TestParseAccounts(t *testing.T) {
-	response := `[{"uuid":"100000ben1es","friendly_name":"Bennies Pizza"},{"uuid":"8013a9468e78","friendly_name":"Bennies London"}]`
-	haveAccounts := []*Account{}
-	err := json.Unmarshal([]byte(response), &haveAccounts)
+func TestGetAccounts(t *testing.T) {
+	if testing.Short() {
+		t.Skip()
+	}
+	client := newClientFromEnv(t)
+	accounts, err := client.GetAccounts(withTimeout(time.Second * 5))
 	if err != nil {
 		t.Fatal(err)
 	}
-	wantAccounts := []*Account{
-		&Account{UUID: "100000ben1es", FriendlyName: "Bennies Pizza"},
-		&Account{UUID: "8013a9468e78", FriendlyName: "Bennies London"},
+	accountUUID := mustGetenv(t, "CAPTAIN_ACCOUNT_ID")
+	found := false
+	for _, account := range accounts {
+		if *account.UUID == accountUUID {
+			found = true
+		}
 	}
-	if !reflect.DeepEqual(haveAccounts, wantAccounts) {
-		t.Errorf("account: incorrect json struct tags")
+	if !found {
+		t.Errorf("expected provided account in list")
 	}
+}
+
+func TestParseAccount(t *testing.T) {
+	data, err := ioutil.ReadFile("testdata/account.json")
+	if err != nil {
+		t.Fatal(err)
+	}
+	account := &Account{
+		UUID:         String("100000ben1es"),
+		FriendlyName: String("Bennies Pizza"),
+	}
+	testExactJSON(t, account, data)
 }

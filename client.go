@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -47,11 +48,12 @@ type Response struct {
 // ErrorResponse reports one or more errors caused by an API request.
 type ErrorResponse struct {
 	Response *Response // HTTP response that caused this error
+	Errors   json.RawMessage
 }
 
 func (r *ErrorResponse) Error() string {
-	return fmt.Sprintf("[%v] %v %v: %d %v", r.Response.RequestID,
-		r.Response.Request.Method, r.Response.Request.URL, r.Response.StatusCode, r.Response.Runtime)
+	return fmt.Sprintf("[%v] %v %v: %d %v %s", r.Response.RequestID,
+		r.Response.Request.Method, r.Response.Request.URL, r.Response.StatusCode, r.Response.Runtime, r.Errors)
 }
 
 // NewRequest creates an API request. A relative URL can be provided in urlStr,
@@ -105,7 +107,7 @@ func (c *Client) NewRequest(method, apiPath string, body interface{}) (*http.Req
 // The provided ctx must be non-nil. If it is canceled or times out,
 // ctx.Err() will be returned.
 func (c *Client) Do(ctx context.Context, req *http.Request, v interface{}) error {
-	w, err := c.client.Do(req.WithContext(ctx))
+	resp, err := c.client.Do(req.WithContext(ctx))
 	if err != nil {
 		// If we got an error, and the context has been canceled,
 		// the context's error is probably more useful.
@@ -117,17 +119,22 @@ func (c *Client) Do(ctx context.Context, req *http.Request, v interface{}) error
 
 		return err
 	}
-	defer w.Body.Close()
-	resp := newResponse(w)
-	err = CheckResponse(resp)
+	defer resp.Body.Close()
+	clientResp := newResponse(resp)
+	err = CheckResponse(clientResp)
 	if err != nil {
 		return err
 	}
 	if v != nil {
-		decErr := json.NewDecoder(resp.Body).Decode(v)
-		if decErr != nil {
-			return decErr
+		if w, ok := v.(io.Writer); ok {
+			io.Copy(w, clientResp.Body)
+		} else {
+			decErr := json.NewDecoder(clientResp.Body).Decode(v)
+			if decErr != nil {
+				return decErr
+			}
 		}
+
 	}
 	return nil
 }
@@ -145,5 +152,13 @@ func CheckResponse(r *Response) error {
 	if c := r.StatusCode; 200 <= c && c <= 299 {
 		return nil
 	}
-	return &ErrorResponse{Response: r}
+	errorResponse := &ErrorResponse{Response: r}
+	if r.StatusCode == 422 {
+		body, err := ioutil.ReadAll(r.Body)
+		if err != nil {
+			return err
+		}
+		errorResponse.Errors = json.RawMessage(body)
+	}
+	return errorResponse
 }
