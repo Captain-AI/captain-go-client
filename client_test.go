@@ -33,6 +33,19 @@ func TestLiveRequests(t *testing.T) {
 	if testAuthResponse.Message != "Successfully Authorised Using Developer Key and Integration Key." {
 		t.Errorf("unexpected response message")
 	}
+	accounts, err := client.GetAccounts(withTimeout(time.Second * 5))
+	if err != nil {
+		t.Fatal(err)
+	}
+	found := false
+	for _, account := range accounts {
+		if account.UUID == accountID {
+			found = true
+		}
+	}
+	if !found {
+		t.Errorf("expected provided account in list")
+	}
 }
 
 func withTimeout(timeout time.Duration) context.Context {
