@@ -1,17 +1,15 @@
 {
   "uuid": "c7285fb5211a",
   "created_at": "2019-07-16T12:01:08.618Z",
-  "scheduled_for": null,
-  "partners_unique_internal_order_id": null,
+  "partners_unique_internal_order_id": "7b1feea5-a863-4e1a-9c02-9323a605f6d9",
   "kind": "delivery",
-  "special_instructions": null,
-  "placed_at_time": null,
+  "special_instructions": "peanut allergy",
+  "placed_at_time": "2019-07-16T12:01:08.618Z",
   "custom_fields": {
     "custom_data_tag": "first_time_customer",
     "link_to_voucher_url": "https://www.restodownloads.com/2839.pdf"
   },
-  "signature_url": null,
-  "send_tracking_link_by_sms": null,
+  "send_tracking_link_by_sms": false,
   "items_link": "https://www.toogood-logistics.com/receipts/12211.pdf",
   "signature_page_content": {},
   "store_order_reference_description": "9994",
@@ -22,10 +20,10 @@
     "full_name": "Ben Potter",
     "email": "testcustomer@captain.ai",
     "phone_number": "+12165695587",
-    "opted_out_of_SMS": null,
-    "opted_out_of_email": null,
     "partners_internal_recipient_id": "xcxQrjcPA3sTA0dFWwC5Yw",
-    "landline_number": "+13572124868"
+    "landline_number": "+13572124868",
+    "opted_out_of_SMS": false,
+    "opted_out_of_email": false
   },
   "financial_record": {
     "delivery_fee": 5,
@@ -51,9 +49,9 @@
       "city": "Las Vegas",
       "postcode": "89107",
       "country": "United States",
-      "address_specific_instructions_to_driver": null,
-      "state": null,
-      "apartment_number": null,
+      "address_specific_instructions_to_driver": "ring the bell",
+      "state": "Nevada",
+      "apartment_number": "",
       "latitude": "36.165127",
       "longitude": "-115.182888"
     }

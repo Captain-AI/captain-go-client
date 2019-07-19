@@ -8,14 +8,14 @@ type Order struct {
 	UUID                      *string                `json:"uuid,omitempty"`
 	Kind                      *string                `json:"kind"`
 	SpecialInstructions       *string                `json:"special_instructions"`
-	ScheduledFor              *string                `json:"scheduled_for"`
+	ScheduledFor              *string                `json:"scheduled_for,omitempty"`
 	PartnerInternalID         *string                `json:"partners_unique_internal_order_id"`
 	StoreReferenceDescription *string                `json:"store_order_reference_description"`
 	TrackingURL               *string                `json:"tracking_url,omitempty"`
 	CustomFields              map[string]interface{} `json:"custom_fields"`
-	SignatureURL              *string                `json:"signature_url"`
-	SendTrackingLinkBySMS     *bool                  `json:"send_tracking_link_by_sms"`
-	ItemsLink                 *string                `json:"items_link"`
+	SignatureURL              *string                `json:"signature_url,omitempty"`
+	SendTrackingLinkBySMS     *bool                  `json:"send_tracking_link_by_sms,omitempty"`
+	ItemsLink                 *string                `json:"items_link,omitempty"`
 	PlacedAtTime              *Timestamp             `json:"placed_at_time"`
 	CreatedAt                 *Timestamp             `json:"created_at,omitempty"`
 	Recipient                 *Customer              `json:"recipient"`
@@ -27,13 +27,13 @@ type Order struct {
 type Customer struct {
 	FirstName         *string `json:"first_name"`
 	LastName          *string `json:"last_name"`
-	FullName          *string `json:"full_name"`
+	FullName          *string `json:"full_name,omitempty"`
 	Email             *string `json:"email"`
 	PhoneNumber       *string `json:"phone_number"`
-	OptedOutOfSMS     *bool   `json:"opted_out_of_SMS"`
-	OptedOutOfEmail   *bool   `json:"opted_out_of_email"`
+	OptedOutOfSMS     *bool   `json:"opted_out_of_SMS,omitempty"`
+	OptedOutOfEmail   *bool   `json:"opted_out_of_email,omitempty"`
 	PartnerInternalID *string `json:"partners_internal_recipient_id"`
-	LandlineNumber    *string `json:"landline_number"`
+	LandlineNumber    *string `json:"landline_number,omitempty"`
 }
 
 type DeliveryJob struct {
@@ -105,8 +105,8 @@ func (c *Client) GetOrder(ctx context.Context, accountUUID string, orderUUID str
 }
 
 type CreateOrderResponse struct {
-	UUID        string `json:"uuid"`
-	TrackingURL string `json:"tracking_url"`
+	UUID        *string `json:"uuid"`
+	TrackingURL *string `json:"tracking_url"`
 }
 
 func (c *Client) CreateOrder(ctx context.Context, accountUUID string, order *Order) (*CreateOrderResponse, error) {

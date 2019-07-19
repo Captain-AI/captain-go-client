@@ -1,7 +1,8 @@
 package captain
 
 import (
-	"encoding/json"
+	"github.com/go-test/deep"
+	"github.com/rs/xid"
 	"io/ioutil"
 	"testing"
 	"time"
@@ -26,9 +27,9 @@ func TestCreateOrder(t *testing.T) {
 	client := newClientFromEnv(t)
 	now := time.Now()
 	accountUUID := mustGetenv(t, "CAPTAIN_ACCOUNT_ID")
-	order := &Order{
+	createOrder := &Order{
 		Kind:                      String("delivery"),
-		PartnerInternalID:         String("b7357414-a833-4d36-93be-7266139099ee"),
+		PartnerInternalID:         String(xid.New().String()),
 		StoreReferenceDescription: String("order-57"),
 		Recipient: &Customer{
 			FirstName:         String("Scott"),
@@ -36,13 +37,13 @@ func TestCreateOrder(t *testing.T) {
 			FullName:          String("Scott Hicks"),
 			Email:             String("y6lkcedn66e@claimab.com"),
 			PhoneNumber:       String("+17055299947"),
-			PartnerInternalID: String("962cab70-9897-427a-b921-035ca9e50b2a"),
+			PartnerInternalID: String(xid.New().String()),
 		},
 		DeliveryJob: &DeliveryJob{
 			PromisedDeliveryMinutes: Int(60),
 			DropoffLocation: &Location{
-				Name:                 String("Scott Hicks"),
 				Line1:                String("1526 Bayfield St"),
+				Line2:                String(""),
 				City:                 String("Midland"),
 				Postcode:             String("L4S 1V5"),
 				Country:              String("Canada"),
@@ -50,6 +51,7 @@ func TestCreateOrder(t *testing.T) {
 				State:                String("Ontario"),
 				Latitude:             String("44.7495"),
 				Longitude:            String("79.8922"),
+				ApartmentNumber:      String(""),
 			},
 		},
 		CustomFields: map[string]interface{}{
@@ -57,17 +59,23 @@ func TestCreateOrder(t *testing.T) {
 		},
 		PlacedAtTime: &Timestamp{now},
 	}
-	data, err := json.Marshal(order)
+	createOrderResponse, err := client.CreateOrder(withTimeout(time.Second*5), accountUUID, createOrder)
 	if err != nil {
 		t.Fatal(err)
 	}
-	t.Log(string(data))
-	createOrderResponse, err := client.CreateOrder(withTimeout(time.Second*5), accountUUID, order)
+	if createOrderResponse.UUID == nil {
+		t.Errorf("expected order UUID")
+	}
+	order, err := client.GetOrder(withTimeout(time.Second*5), accountUUID, *createOrderResponse.UUID)
 	if err != nil {
 		t.Fatal(err)
 	}
-	t.Logf("%# v", createOrderResponse)
-	t.Fail()
+	if diff := deep.Equal(order.Recipient, createOrder.Recipient); diff != nil {
+		t.Fatal(diff)
+	}
+	if diff := deep.Equal(order.DeliveryJob, createOrder.DeliveryJob); diff != nil {
+		t.Fatal(diff)
+	}
 }
 
 func TestParseOrder(t *testing.T) {
@@ -77,20 +85,21 @@ func TestParseOrder(t *testing.T) {
 	}
 	order := &Order{
 		UUID:                      String("c7285fb5211a"),
-		ScheduledFor:              nil,
 		Kind:                      String("delivery"),
-		SpecialInstructions:       nil,
-		PartnerInternalID:         nil,
+		SpecialInstructions:       String("peanut allergy"),
+		PartnerInternalID:         String("7b1feea5-a863-4e1a-9c02-9323a605f6d9"),
 		StoreReferenceDescription: String("9994"),
 		TrackingURL:               String("https://tracking.captain.ai/t/c7285fb5211a"),
 		CustomFields: map[string]interface{}{
 			"custom_data_tag":     "first_time_customer",
 			"link_to_voucher_url": "https://www.restodownloads.com/2839.pdf",
 		},
-		SignatureURL:          nil,
-		SendTrackingLinkBySMS: nil,
+		SendTrackingLinkBySMS: Bool(false),
 		ItemsLink:             String("https://www.toogood-logistics.com/receipts/12211.pdf"),
 		CreatedAt: &Timestamp{
+			Time: time.Date(2019, 7, 16, 12, 1, 8, 618e6, time.UTC),
+		},
+		PlacedAtTime: &Timestamp{
 			Time: time.Date(2019, 7, 16, 12, 1, 8, 618e6, time.UTC),
 		},
 		Recipient: &Customer{
@@ -101,6 +110,8 @@ func TestParseOrder(t *testing.T) {
 			PhoneNumber:       String("+12165695587"),
 			PartnerInternalID: String("xcxQrjcPA3sTA0dFWwC5Yw"),
 			LandlineNumber:    String("+13572124868"),
+			OptedOutOfSMS:     Bool(false),
+			OptedOutOfEmail:   Bool(false),
 		},
 		DeliveryJob: &DeliveryJob{
 			PromisedDeliveryMinutes:   Int(45),
@@ -112,9 +123,9 @@ func TestParseOrder(t *testing.T) {
 				City:                 String("Las Vegas"),
 				Postcode:             String("89107"),
 				Country:              String("United States"),
-				SpecificInstructions: nil,
-				State:                nil,
-				ApartmentNumber:      nil,
+				SpecificInstructions: String("ring the bell"),
+				State:                String("Nevada"),
+				ApartmentNumber:      String(""),
 				Latitude:             String("36.165127"),
 				Longitude:            String("-115.182888"),
 			},
