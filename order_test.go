@@ -167,6 +167,15 @@ func TestParseOrder(t *testing.T) {
 			TaxType:                     String("VAT"),
 		},
 		SignaturePageContent: &SignaturePageContent{},
+		Items: []*OrderItem{
+			&OrderItem{
+				Name:     String("Margherita Pizza"),
+				Category: String("Pizza"),
+				Addons: []string{
+					"cheese",
+				},
+			},
+		},
 	}
 	testExactJSON(t, order, data)
 }

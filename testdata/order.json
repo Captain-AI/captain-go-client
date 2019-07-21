@@ -55,5 +55,14 @@
       "latitude": "36.165127",
       "longitude": "-115.182888"
     }
-  }
+  },
+  "items": [
+    {
+      "name": "Margherita Pizza",
+      "category": "Pizza",
+      "addons": [
+        "cheese"
+      ]
+    }
+  ]
 }

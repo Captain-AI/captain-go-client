@@ -10,6 +10,7 @@ import (
 )
 
 func newClientFromEnv(t *testing.T) *Client {
+	t.Helper()
 	client := NewClient()
 	client.IntegrationKey = mustGetenv(t, "CAPTAIN_INTEGRATION_KEY")
 	client.DeveloperKey = mustGetenv(t, "CAPTAIN_DEVELOPER_KEY")
@@ -17,6 +18,7 @@ func newClientFromEnv(t *testing.T) *Client {
 }
 
 func mustGetenv(t *testing.T, name string) string {
+	t.Helper()
 	value := os.Getenv(name)
 	if value == "" {
 		t.Fatalf("missing environment variable: %q", name)
@@ -30,6 +32,7 @@ func withTimeout(timeout time.Duration) context.Context {
 }
 
 func logJSON(t *testing.T, v interface{}) {
+	t.Helper()
 	data, err := json.Marshal(v)
 	if err != nil {
 		t.Fatal(err)
@@ -38,6 +41,7 @@ func logJSON(t *testing.T, v interface{}) {
 }
 
 func testExactJSON(t *testing.T, v interface{}, data []byte) {
+	t.Helper()
 	var want interface{}
 	err := json.Unmarshal(data, &want)
 	if err != nil {

@@ -22,6 +22,13 @@ type Order struct {
 	DeliveryJob               *DeliveryJob           `json:"delivery_job"`
 	SignaturePageContent      *SignaturePageContent  `json:"signature_page_content,omitempty"`
 	FinancialRecord           *FinancialRecord       `json:"financial_record,omitempty"`
+	Items                     []*OrderItem           `json:"items"`
+}
+
+type OrderItem struct {
+	Addons   []string `json:"addons"`
+	Name     *string  `json:"name"`
+	Category *string  `json:"category"`
 }
 
 type Customer struct {
