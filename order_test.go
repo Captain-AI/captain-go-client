@@ -112,6 +112,8 @@ func TestParseOrder(t *testing.T) {
 		PartnerInternalID:         String("7b1feea5-a863-4e1a-9c02-9323a605f6d9"),
 		StoreReferenceDescription: String("9994"),
 		TrackingURL:               String("https://tracking.captain.ai/t/c7285fb5211a"),
+		EnterpriseLink:            String("http://enterprise.com"),
+		SignatureURL:              String("http://www.cloudinary/imageurl.jpg"),
 		CustomFields: map[string]interface{}{
 			"custom_data_tag":     "first_time_customer",
 			"link_to_voucher_url": "https://www.restodownloads.com/2839.pdf",
@@ -166,7 +168,11 @@ func TestParseOrder(t *testing.T) {
 			TotalTipLeftForDriver:       Float64(5),
 			TaxType:                     String("VAT"),
 		},
-		SignaturePageContent: &SignaturePageContent{},
+		SignaturePageContent: &SignaturePageContent{
+			TitleText:     String("Sign for your Order"),
+			BodyText:      String("You placed an order with Card XXX-5342"),
+			TipPromptText: String("Would you like to Tip your driver?"),
+		},
 		Items: []*OrderItem{
 			&OrderItem{
 				Name:     String("Margherita Pizza"),

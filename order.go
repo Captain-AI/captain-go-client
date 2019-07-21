@@ -14,6 +14,7 @@ type Order struct {
 	TrackingURL               *string                `json:"tracking_url,omitempty"`
 	CustomFields              map[string]interface{} `json:"custom_fields"`
 	SignatureURL              *string                `json:"signature_url,omitempty"`
+	EnterpriseLink            *string                `json:"enterprise_link,omitempty"`
 	SendTrackingLinkBySMS     *bool                  `json:"send_tracking_link_by_sms,omitempty"`
 	ItemsLink                 *string                `json:"items_link,omitempty"`
 	PlacedAtTime              *Timestamp             `json:"placed_at_time"`

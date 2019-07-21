@@ -10,8 +10,14 @@
     "link_to_voucher_url": "https://www.restodownloads.com/2839.pdf"
   },
   "send_tracking_link_by_sms": false,
+  "enterprise_link": "http://enterprise.com",
+  "signature_url": "http://www.cloudinary/imageurl.jpg",
   "items_link": "https://www.toogood-logistics.com/receipts/12211.pdf",
-  "signature_page_content": {},
+  "signature_page_content": {
+    "title_text": "Sign for your Order",
+    "body_text": "You placed an order with Card XXX-5342",
+    "tip_prompt_text": "Would you like to Tip your driver?"
+  },
   "store_order_reference_description": "9994",
   "tracking_url": "https://tracking.captain.ai/t/c7285fb5211a",
   "recipient": {
