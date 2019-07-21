@@ -59,6 +59,7 @@ func TestCreateOrder(t *testing.T) {
 		},
 		PlacedAtTime: &Timestamp{now},
 	}
+	logJSON(t, createOrder)
 	createOrderResponse, err := client.CreateOrder(withTimeout(time.Second*5), accountUUID, createOrder)
 	if err != nil {
 		t.Fatal(err)
@@ -70,11 +71,28 @@ func TestCreateOrder(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+	logJSON(t, order)
 	if diff := deep.Equal(order.Recipient, createOrder.Recipient); diff != nil {
 		t.Fatal(diff)
 	}
 	if diff := deep.Equal(order.DeliveryJob, createOrder.DeliveryJob); diff != nil {
 		t.Fatal(diff)
+	}
+	statusResponse, err := client.UpdateStatus(withTimeout(time.Second*5), *order.UUID, "being_prepared")
+	if err != nil {
+		t.Fatal(err)
+	}
+	logJSON(t, statusResponse)
+	if *statusResponse.AccountUUID != accountUUID {
+		t.Errorf("expected account UUID")
+	}
+	statusResponse, err = client.GetStatus(withTimeout(time.Second*5), *order.UUID)
+	if err != nil {
+		t.Fatal(err)
+	}
+	logJSON(t, statusResponse)
+	if *statusResponse.LastStatus.OrderStatus != "being_prepared" {
+		t.Errorf("expected updated order status")
 	}
 }
 

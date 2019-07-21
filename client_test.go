@@ -29,6 +29,14 @@ func withTimeout(timeout time.Duration) context.Context {
 	return ctxWithTimeout
 }
 
+func logJSON(t *testing.T, v interface{}) {
+	data, err := json.Marshal(v)
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Log(string(data))
+}
+
 func testExactJSON(t *testing.T, v interface{}, data []byte) {
 	var want interface{}
 	err := json.Unmarshal(data, &want)

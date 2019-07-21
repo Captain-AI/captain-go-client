@@ -21,3 +21,16 @@ func (c *Client) GetAccounts(ctx context.Context) ([]*Account, error) {
 	}
 	return accounts, nil
 }
+
+func (c *Client) GetAccount(ctx context.Context, accountUUID string) (*Account, error) {
+	req, err := c.NewRequest("GET", "/v1/accounts/"+accountUUID, nil)
+	if err != nil {
+		return nil, err
+	}
+	account := &Account{}
+	err = c.Do(ctx, req, account)
+	if err != nil {
+		return nil, err
+	}
+	return account, nil
+}
