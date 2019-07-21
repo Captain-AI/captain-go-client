@@ -21,13 +21,16 @@ func TestGetAccounts(t *testing.T) {
 	}
 }
 
-/*
 func TestGetAccount(t *testing.T) {
 	if testing.Short() {
 		t.Skip()
 	}
 	client := newClientFromEnv(t)
 	accountUUID := mustGetenv(t, "CAPTAIN_ACCOUNT_ID")
+
+	// TODO: API is broken right now ...
+	t.Skip()
+
 	account, err := client.GetAccount(withTimeout(time.Second*5), accountUUID)
 	if err != nil {
 		t.Fatal(err)
@@ -36,7 +39,6 @@ func TestGetAccount(t *testing.T) {
 		t.Errorf("expected account UUID")
 	}
 }
-*/
 
 func TestParseAccount(t *testing.T) {
 	data, err := ioutil.ReadFile("testdata/account.json")
