@@ -2,6 +2,22 @@
 
 Go client for `captain.ai` REST API in JSON format. 
 
+## Example
+
+```go
+client := captain.NewClient()
+client.IntegrationKey = "integration key"
+client.DeveloperKey = "developer key"
+client.UserAgent = "optional user agent"
+
+// Create order.
+order := &captain.Order{
+    // see godoc
+}
+ctx := context.TODO()
+response, err := client.CreateOrder(ctx, order)
+```
+
 ### Testing Live Requests
 
 If you want to test live requests, create a file with environment variables.
