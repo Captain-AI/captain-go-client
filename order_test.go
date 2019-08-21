@@ -58,6 +58,7 @@ func TestCreateOrder(t *testing.T) {
 			"repo": "github.com/Captain-AI/captain-go-client",
 		},
 		PlacedAtTime: &Timestamp{now},
+		Items:        []*OrderItem{},
 	}
 	logJSON(t, createOrder)
 	createOrderResponse, err := client.CreateOrder(withTimeout(time.Second*5), accountUUID, createOrder)

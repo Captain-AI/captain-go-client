@@ -12,7 +12,7 @@ type Order struct {
 	PartnerInternalID         *string                `json:"partners_unique_internal_order_id"`
 	StoreReferenceDescription *string                `json:"store_order_reference_description"`
 	TrackingURL               *string                `json:"tracking_url,omitempty"`
-	CustomFields              map[string]interface{} `json:"custom_fields"`
+	CustomFields              map[string]interface{} `json:"custom_fields,omitempty"`
 	SignatureURL              *string                `json:"signature_url,omitempty"`
 	EnterpriseLink            *string                `json:"enterprise_link,omitempty"`
 	SendTrackingLinkBySMS     *bool                  `json:"send_tracking_link_by_sms,omitempty"`
