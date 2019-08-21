@@ -80,7 +80,7 @@ type FinancialRecord struct {
 	PreDeliveryDriverTip        *float64 `json:"pre_delivery_driver_tip"`
 	PostDeliveryDriverTipByCash *float64 `json:"post_delivery_driver_tip_by_cash,omitempty"`
 	PostDeliveryDriverTipByCard *float64 `json:"post_delivery_driver_tip_by_card,omitempty"`
-	TaxType                     *string  `json:"tax_type"`
+	TaxType                     *string  `json:"tax_type,omitempty"`
 	CardCharges                 *float64 `json:"card_charges"`
 	RemainingBalance            *float64 `json:"remaining_balance"`
 	TotalTipLeftForDriver       *float64 `json:"total_tip_left_for_driver"`
