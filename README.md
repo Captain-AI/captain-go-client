@@ -15,7 +15,7 @@ order := &captain.Order{
     // see godoc
 }
 ctx := context.TODO()
-response, err := client.CreateOrder(ctx, order)
+response, err := client.CreateOrder(ctx, "account id", order)
 ```
 
 ### Testing Live Requests
