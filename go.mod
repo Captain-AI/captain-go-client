@@ -1,4 +1,4 @@
-module github.com/Captain-AI/captain-go-client
+module github.com/captain-ai/captain-go-client
 
 require (
 	github.com/go-test/deep v1.0.2
