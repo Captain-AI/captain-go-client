@@ -33,11 +33,11 @@ type OrderItem struct {
 }
 
 type Customer struct {
-	FirstName         *string `json:"first_name"`
-	LastName          *string `json:"last_name"`
+	FirstName         *string `json:"first_name,omitempty"`
+	LastName          *string `json:"last_name,omitempty"`
 	FullName          *string `json:"full_name,omitempty"`
-	Email             *string `json:"email"`
-	PhoneNumber       *string `json:"phone_number"`
+	Email             *string `json:"email,omitempty"`
+	PhoneNumber       *string `json:"phone_number,omitempty"`
 	OptedOutOfSMS     *bool   `json:"opted_out_of_SMS,omitempty"`
 	OptedOutOfEmail   *bool   `json:"opted_out_of_email,omitempty"`
 	PartnerInternalID *string `json:"partners_internal_recipient_id"`
