@@ -1,11 +1,12 @@
 package captain
 
 import (
-	"github.com/go-test/deep"
-	"github.com/rs/xid"
 	"io/ioutil"
 	"testing"
 	"time"
+
+	"github.com/go-test/deep"
+	"github.com/rs/xid"
 )
 
 func TestGetOrders(t *testing.T) {
@@ -181,6 +182,7 @@ func TestParseOrder(t *testing.T) {
 				Addons: []string{
 					"cheese",
 				},
+				Quantity: Int(1),
 			},
 		},
 	}

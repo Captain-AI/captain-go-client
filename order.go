@@ -30,6 +30,7 @@ type OrderItem struct {
 	Addons   []string `json:"addons"`
 	Name     *string  `json:"name"`
 	Category *string  `json:"category"`
+	Quantity *int     `json:"quantity,omitempty"`
 }
 
 type Customer struct {
