@@ -3,17 +3,18 @@ package captain
 import (
 	"context"
 	"encoding/json"
-	"github.com/go-test/deep"
 	"os"
 	"testing"
 	"time"
+
+	"github.com/go-test/deep"
 )
 
 func newClientFromEnv(t *testing.T) *Client {
 	t.Helper()
 	client := NewClient()
-	client.IntegrationKey = mustGetenv(t, "CAPTAIN_INTEGRATION_KEY")
-	client.DeveloperKey = mustGetenv(t, "CAPTAIN_DEVELOPER_KEY")
+	client.SetIntegrationKey(mustGetenv(t, "CAPTAIN_INTEGRATION_KEY"))
+	client.SetDeveloperKey(mustGetenv(t, "CAPTAIN_DEVELOPER_KEY"))
 	return client
 }
 

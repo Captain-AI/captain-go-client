@@ -17,19 +17,19 @@ type Order struct {
 	EnterpriseLink            *string                `json:"enterprise_link,omitempty"`
 	SendTrackingLinkBySMS     *bool                  `json:"send_tracking_link_by_sms,omitempty"`
 	ItemsLink                 *string                `json:"items_link,omitempty"`
-	PlacedAtTime              *Timestamp             `json:"placed_at_time"`
+	PlacedAtTime              *Timestamp             `json:"placed_at_time,omitempty"`
 	CreatedAt                 *Timestamp             `json:"created_at,omitempty"`
 	Recipient                 *Customer              `json:"recipient"`
-	DeliveryJob               *DeliveryJob           `json:"delivery_job"`
+	DeliveryJob               *DeliveryJob           `json:"delivery_job,omitempty"`
 	SignaturePageContent      *SignaturePageContent  `json:"signature_page_content,omitempty"`
 	FinancialRecord           *FinancialRecord       `json:"financial_record,omitempty"`
 	Items                     []*OrderItem           `json:"items"`
 }
 
 type OrderItem struct {
-	Addons   []string `json:"addons"`
+	Addons   []string `json:"addons,omitempty"`
 	Name     *string  `json:"name"`
-	Category *string  `json:"category"`
+	Category *string  `json:"category,omitempty"`
 	Quantity *int     `json:"quantity,omitempty"`
 }
 
@@ -47,8 +47,8 @@ type Customer struct {
 
 type DeliveryJob struct {
 	DropoffLocation           *Location `json:"dropoff_location"`
-	PromisedDeliveryMinutes   *int      `json:"promised_delivery_minutes"`
-	ShowDriverTipRequestOnApp *bool     `json:"show_driver_tip_request_on_app"`
+	PromisedDeliveryMinutes   *int      `json:"promised_delivery_minutes,omitempty"`
+	ShowDriverTipRequestOnApp *bool     `json:"show_driver_tip_request_on_app,omitempty"`
 }
 
 type Location struct {

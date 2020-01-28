@@ -20,19 +20,28 @@ const (
 
 // A Client manages communication with the CAPTAIN API.
 type Client struct {
-	BaseURL        *url.URL
-	UserAgent      string
-	IntegrationKey string
-	DeveloperKey   string
-	client         *http.Client
+	BaseURL    *url.URL
+	UserAgent  string
+	HTTPClient *http.Client
+
+	integrationKey string
+	developerKey   string
+}
+
+func (c *Client) SetIntegrationKey(key string) {
+	c.integrationKey = key
+}
+
+func (c *Client) SetDeveloperKey(key string) {
+	c.developerKey = key
 }
 
 // NewClient returns a new CAPTAIN API client.
 func NewClient() *Client {
 	baseURL, _ := url.Parse(defaultBaseURL)
 	return &Client{
-		BaseURL: baseURL,
-		client:  &http.Client{},
+		BaseURL:    baseURL,
+		HTTPClient: &http.Client{},
 	}
 }
 
@@ -89,11 +98,11 @@ func (c *Client) NewRequest(method, apiPath string, body interface{}) (*http.Req
 	if c.UserAgent != "" {
 		req.Header.Set("User-Agent", c.UserAgent)
 	}
-	if c.IntegrationKey != "" {
-		req.Header.Set("X-Integration-Key", c.IntegrationKey)
+	if c.integrationKey != "" {
+		req.Header.Set("X-Integration-Key", c.integrationKey)
 	}
-	if c.DeveloperKey != "" {
-		req.Header.Set("X-Developer-Key", c.DeveloperKey)
+	if c.developerKey != "" {
+		req.Header.Set("X-Developer-Key", c.developerKey)
 	}
 	return req, nil
 }
@@ -107,7 +116,7 @@ func (c *Client) NewRequest(method, apiPath string, body interface{}) (*http.Req
 // The provided ctx must be non-nil. If it is canceled or times out,
 // ctx.Err() will be returned.
 func (c *Client) Do(ctx context.Context, req *http.Request, v interface{}) error {
-	resp, err := c.client.Do(req.WithContext(ctx))
+	resp, err := c.HTTPClient.Do(req.WithContext(ctx))
 	if err != nil {
 		// If we got an error, and the context has been canceled,
 		// the context's error is probably more useful.

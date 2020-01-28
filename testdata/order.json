@@ -47,7 +47,6 @@
   },
   "delivery_job": {
     "promised_delivery_minutes": 45,
-    "show_driver_tip_request_on_app": null,
     "dropoff_location": {
       "name": null,
       "line_1": "Campbell Dr",
