@@ -119,7 +119,7 @@ type CreateOrderResponse struct {
 }
 
 func (c *Client) CreateOrder(ctx context.Context, accountUUID string, order *Order) (*CreateOrderResponse, error) {
-	req, err := c.NewRequest("POST", "/v1/accounts/"+accountUUID+"/orders", order)
+	req, err := c.NewRequest("POST", "public-api/v1/accounts/"+accountUUID+"/orders", order)
 	if err != nil {
 		return nil, err
 	}
