@@ -15,7 +15,7 @@ import (
 )
 
 const (
-	defaultBaseURL = "https://api.captain.ai/"
+	defaultBaseURL = "https://cds.captain.ai/"
 )
 
 // A Client manages communication with the CAPTAIN API.
