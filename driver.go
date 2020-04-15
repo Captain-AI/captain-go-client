@@ -18,7 +18,7 @@ type Driver struct {
 }
 
 func (c *Client) GetDrivers(ctx context.Context, accountUUID string) ([]*Driver, error) {
-	req, err := c.NewRequest("GET", "/v1/accounts/"+accountUUID+"/drivers", nil)
+	req, err := c.NewRequest("GET", "/public-api/v1/accounts/"+accountUUID+"/drivers", nil)
 	if err != nil {
 		return nil, err
 	}
@@ -31,7 +31,7 @@ func (c *Client) GetDrivers(ctx context.Context, accountUUID string) ([]*Driver,
 }
 
 func (c *Client) GetDriver(ctx context.Context, accountUUID string, driverUUID string) (*Driver, error) {
-	req, err := c.NewRequest("GET", "/v1/accounts/"+accountUUID+"/drivers/"+driverUUID, nil)
+	req, err := c.NewRequest("GET", "/public-api/v1/accounts/"+accountUUID+"/drivers/"+driverUUID, nil)
 	if err != nil {
 		return nil, err
 	}

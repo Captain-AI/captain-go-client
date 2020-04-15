@@ -10,7 +10,7 @@ type Account struct {
 }
 
 func (c *Client) GetAccounts(ctx context.Context) ([]*Account, error) {
-	req, err := c.NewRequest("GET", "/v1/accounts", nil)
+	req, err := c.NewRequest("GET", "/public-api/v1/accounts", nil)
 	if err != nil {
 		return nil, err
 	}
@@ -23,7 +23,7 @@ func (c *Client) GetAccounts(ctx context.Context) ([]*Account, error) {
 }
 
 func (c *Client) GetAccount(ctx context.Context, accountUUID string) (*Account, error) {
-	req, err := c.NewRequest("GET", "/v1/accounts/"+accountUUID, nil)
+	req, err := c.NewRequest("GET", "/public-api/v1/accounts/"+accountUUID, nil)
 	if err != nil {
 		return nil, err
 	}
