@@ -76,8 +76,8 @@ type FinancialRecord struct {
 	GrandTotalIncludingTax      *float64 `json:"grand_total_including_tax"`
 	ItemsSubtotal               *float64 `json:"items_subtotal"`
 	PaymentAmountReceived       *float64 `json:"payment_amount_received"`
-	PaymentMethod               *float64 `json:"payment_method"`
-	PaymentStatus               *float64 `json:"payment_status"`
+	PaymentMethod               *string  `json:"payment_method"` //must be 'cash', 'card', 'online', 'e-payment'
+	PaymentStatus               *string  `json:"payment_status"`
 	PreDeliveryDriverTip        *float64 `json:"pre_delivery_driver_tip"`
 	PostDeliveryDriverTipByCash *float64 `json:"post_delivery_driver_tip_by_cash,omitempty"`
 	PostDeliveryDriverTipByCard *float64 `json:"post_delivery_driver_tip_by_card,omitempty"`
